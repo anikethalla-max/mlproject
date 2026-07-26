@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediction Dashboard</title>
+    <style>
+      :root {
+        --bg: #fff8dc;
+        --panel: rgba(255, 255, 255, 0.9);
+        --violet: #7c3aed;
+        --violet-dark: #4c1d95;
+        --amber: #f59e0b;
+        --pink: #ec4899;
+        --text: #2f2346;
+        --muted: #6b7280;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(245, 158, 11, 0.24), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.22), transparent 28%),
+          linear-gradient(135deg, #fff7d0 0%, #f5ebff 100%);
+      }
+      .container {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 1.45rem;
+        color: var(--violet-dark);
+      }
+      .pill {
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), rgba(124, 58, 237, 0.14));
+        color: var(--violet);
+        font-weight: 700;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 24px;
+      }
+      .card {
+        background: var(--panel);
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 18px 40px rgba(76, 29, 149, 0.13);
+        border: 1px solid rgba(124, 58, 237, 0.14);
+        backdrop-filter: blur(12px);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--violet-dark);
+      }
+      input, select {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(124, 58, 237, 0.2);
+        background: #fff;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      input:focus, select:focus {
+        outline: none;
+        border-color: var(--pink);
+        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.16);
+      }
+      .full { grid-column: 1 / -1; }
+      .btn {
+        margin-top: 8px;
+        border: none;
+        padding: 13px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 800;
+        color: white;
+        background: linear-gradient(90deg, var(--amber), #ffbf3f, var(--pink));
+        box-shadow: 0 10px 24px rgba(245, 158, 11, 0.2);
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 14px 28px rgba(124, 58, 237, 0.22);
+      }
+      .result {
+        background: linear-gradient(135deg, var(--violet-dark), var(--violet), var(--pink));
+        color: white;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+      }
+      .result h2 { margin: 0 0 8px; }
+      .score { font-size: 2.4rem; font-weight: 800; }
+      .muted { color: var(--muted); }
+      @media (max-width: 900px) {
+        .grid { grid-template-columns: 1fr; }
+        .form-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">Student Performance Studio</div>
+        <div class="pill">Live prediction panel</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Enter student details</h2>
+          <p class="muted">Complete the form to estimate the student’s maths score.</p>
+          <form action="/predictdata" method="post">
+            <div class="form-grid">
+              <label>
+                Gender
+                <select name="gender" required>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </label>
+              <label>
+                Ethnicity
+                <select name="ethnicity" required>
+                  <option value="group A">Group A</option>
+                  <option value="group B">Group B</option>
+                  <option value="group C">Group C</option>
+                  <option value="group D">Group D</option>
+                  <option value="group E">Group E</option>
+                </select>
+              </label>
+              <label>
+                Parent Education
+                <select name="parental_level_of_education" required>
+                  <option value="associate's degree">Associate's degree</option>
+                  <option value="bachelor's degree">Bachelor's degree</option>
+                  <option value="high school">High school</option>
+                  <option value="master's degree">Master's degree</option>
+                  <option value="some college">Some college</option>
+                  <option value="some high school">Some high school</option>
+                </select>
+              </label>
+              <label>
+                Lunch Type
+                <select name="lunch" required>
+                  <option value="free/reduced">Free/Reduced</option>
+                  <option value="standard">Standard</option>
+                </select>
+              </label>
+              <label>
+                Test Preparation
+                <select name="test_preparation_course" required>
+                  <option value="none">None</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </label>
+              <label>
+                Reading Score
+                <input type="number" name="reading_score" min="0" max="100" required />
+              </label>
+              <label>
+                Writing Score
+                <input type="number" name="writing_score" min="0" max="100" required />
+              </label>
+              <div class="full">
+                <button class="btn" type="submit">Predict score</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="result">
+            <h2>Prediction result</h2>
+            {% if results is not none %}
+              <div class="score">{{ results }}</div>
+              <p>{{ prediction_text }}</p>
+            {% else %}
+              <p>Submit the form to see the predicted maths score here.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
